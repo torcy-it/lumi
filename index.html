@@ -304,65 +304,79 @@
       max-width: 620px;
     }
 
-    .phone-card {
+    .screenshot-card {
       position: relative;
       border-radius: var(--radius-xl);
-      background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(251,243,199,.88));
+      background: linear-gradient(180deg, rgba(255,255,255,.94), rgba(251,243,199,.9));
       border: 3px solid var(--deep-blue);
       box-shadow: var(--shadow-blue);
-      padding: 24px;
+      padding: clamp(16px, 3vw, 24px);
       overflow: hidden;
     }
 
-    .app-window {
+    .screenshot-placeholder {
       min-height: 420px;
       border-radius: 28px;
+      border: 4px dashed rgba(0, 29, 71, .72);
       background:
-        radial-gradient(circle at 75% 22%, var(--gloss-mid) 0 7%, transparent 8%),
-        linear-gradient(180deg, #9ddfff 0%, #dff6ff 46%, #5da65c 47%, #2f6f4e 100%);
-      border: 4px solid var(--deep-blue);
+        linear-gradient(135deg, rgba(255,255,255,.78), rgba(157,223,255,.62)),
+        repeating-linear-gradient(45deg, rgba(0,29,71,.055) 0 10px, transparent 10px 20px);
+      display: grid;
+      place-items: center;
+      padding: 26px;
+      text-align: center;
+      color: var(--deep-blue);
       position: relative;
       overflow: hidden;
     }
 
-    .lumi-icon-big {
-      width: min(230px, 58vw);
-      aspect-ratio: 1;
+    .screenshot-placeholder::before {
+      content: "";
       position: absolute;
-      left: 50%;
-      top: 36px;
-      transform: translateX(-50%);
-      border-radius: 42px;
-      filter: drop-shadow(0 16px 20px rgba(0, 29, 71, .28));
+      inset: 18px;
+      border-radius: 22px;
+      border: 2px solid rgba(0, 29, 71, .16);
+      pointer-events: none;
     }
 
-    .map-path {
-      position: absolute;
-      left: 50%;
-      bottom: -50px;
-      width: 170px;
-      height: 270px;
-      background: #f1d58a;
-      border: 3px solid var(--deep-blue);
-      transform: translateX(-50%) rotate(5deg);
-      clip-path: polygon(38% 0, 68% 0, 100% 100%, 0 100%);
+    .screenshot-placeholder img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 22px;
     }
 
-    .waypoint {
-      position: absolute;
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
+    .placeholder-content {
+      position: relative;
+      z-index: 1;
+      max-width: 330px;
+      display: grid;
+      gap: 12px;
+      justify-items: center;
+    }
+
+    .placeholder-icon {
+      width: 74px;
+      height: 74px;
+      border-radius: 22px;
       display: grid;
       place-items: center;
-      background: var(--book-red);
-      color: white;
-      border: 3px solid var(--deep-blue);
-      box-shadow: 0 7px 0 var(--deep-blue);
-      font-size: 1.2rem;
+      background: linear-gradient(180deg, var(--gloss-top), var(--gloss-mid));
+      border: 2px solid var(--btn-border);
+      box-shadow: 0 5px 8px rgba(0,0,0,.22);
+      font-size: 2rem;
     }
-    .waypoint.one { left: 32px; bottom: 72px; }
-    .waypoint.two { right: 42px; bottom: 118px; background: var(--gloss-mid); color: var(--deep-blue); }
+
+    .placeholder-content strong {
+      font-size: clamp(1.35rem, 3vw, 2rem);
+      line-height: 1.05;
+      letter-spacing: -.03em;
+    }
+
+    .placeholder-content span {
+      color: var(--muted);
+      font-weight: 700;
+    }
 
     section { padding: 58px 0; }
     .panel { display: none; }
@@ -568,12 +582,21 @@
           </div>
         </div>
 
-        <div class="phone-card" aria-label="Anteprima visiva dell'app">
-          <div class="app-window">
-            <img class="lumi-icon-big" src="iconLumi.svg" alt="" aria-hidden="true" />
-            <div class="map-path" aria-hidden="true"></div>
-            <div class="waypoint one" aria-hidden="true">1</div>
-            <div class="waypoint two" aria-hidden="true">★</div>
+        <div class="screenshot-card" aria-label="Placeholder per screenshot dell'app">
+          <div class="screenshot-placeholder">
+            <!--
+              Per inserire uno screenshot:
+              1. Metti il file nella stessa cartella di index.html, ad esempio screenshot-app.png
+              2. Sostituisci il blocco .placeholder-content qui sotto con:
+                 <img src="screenshot-app.png" alt="Screenshot di Lumi: World Of Fables" />
+            -->
+            <div class="placeholder-content">
+              <div class="placeholder-icon" aria-hidden="true">📱</div>
+              <strong data-lang="it">Inserisci qui lo screenshot dell'app</strong>
+              <strong data-lang="en">Add your app screenshot here</strong>
+              <span data-lang="it">Formato consigliato: PNG/JPG, verticale o iPad</span>
+              <span data-lang="en">Recommended format: PNG/JPG, portrait or iPad</span>
+            </div>
           </div>
         </div>
       </div>
