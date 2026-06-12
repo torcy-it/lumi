@@ -8,12 +8,10 @@
 
   <style>
     :root {
-      --sky: #8fd0f4;
-      --sky-light: #e8f4ff;
-      --cream: #fff5c9;
+      --sky: #8fc6ea;
+      --sky-light: #e5f0fb;
+      --cream: #f6f0da;
       --deep-blue: #001d47;
-      --blue: #034197;
-      --text: #17243a;
       --muted: #526173;
 
       --gloss-top: #FDE549;
@@ -22,8 +20,10 @@
       --btn-border: #430303;
       --btn-label: #262521;
 
+      --header-height: 82px;
+      --footer-bg: #f1ecd8;
+      --max-width: 1280px;
       --radius-xl: 34px;
-      --max-width: 1120px;
     }
 
     * { box-sizing: border-box; }
@@ -32,24 +32,90 @@
       margin: 0;
       min-height: 100%;
       font-family: ui-rounded, "SF Pro Rounded", Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: var(--text);
-      background: linear-gradient(180deg, var(--sky) 0%, var(--sky-light) 45%, var(--cream) 100%);
+      color: var(--deep-blue);
+      background: linear-gradient(180deg, var(--sky) 0%, var(--sky-light) 42%, var(--cream) 100%);
     }
 
     body {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 32px 16px;
+      flex-direction: column;
     }
 
     a { color: inherit; text-decoration: none; }
 
+    .container {
+      width: min(100% - 40px, var(--max-width));
+      margin-inline: auto;
+    }
+
+    .top-bar {
+      height: var(--header-height);
+      border-bottom: 1px solid rgba(0, 29, 71, .18);
+      background: rgba(143, 198, 234, .96);
+      display: flex;
+      align-items: center;
+    }
+
+    .top-bar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      font-weight: 900;
+      font-size: 1.15rem;
+    }
+
+    .brand-icon {
+      width: 62px;
+      height: 62px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.92);
+      box-shadow: 0 6px 14px rgba(0,0,0,.12);
+      display: grid;
+      place-items: center;
+      color: #3279c0;
+      font-size: 1.55rem;
+      border: 1px solid rgba(0,29,71,.08);
+    }
+
+    .lang-switch {
+      display: flex;
+      gap: 12px;
+    }
+
+    .lang-btn {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: 2px solid var(--btn-border);
+      background: linear-gradient(180deg, var(--gloss-top), var(--gloss-mid), var(--gloss-bottom));
+      color: var(--btn-label);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 1.05rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,.18);
+    }
+
+    .hero-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      padding: 56px 0 64px;
+    }
+
     .page {
-      width: min(100%, var(--max-width));
+      width: 100%;
       display: grid;
       grid-template-columns: 1fr;
-      gap: 28px;
+      gap: 32px;
       align-items: center;
     }
 
@@ -63,40 +129,43 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 9px 15px;
+      padding: 10px 16px;
       border-radius: 999px;
       border: 2px solid var(--btn-border);
       background: linear-gradient(180deg, var(--gloss-top), var(--gloss-mid));
       color: var(--btn-label);
       font-weight: 950;
       box-shadow: 0 3px 5px rgba(0, 0, 0, .22);
-      text-transform: uppercase;
-      letter-spacing: .02em;
+      font-size: clamp(0.95rem, 1.8vw, 1.15rem);
     }
 
     h1 {
       margin: 0;
       color: var(--deep-blue);
-      font-size: clamp(3rem, 9vw, 6rem);
-      line-height: .95;
-      letter-spacing: -.06em;
-      max-width: 780px;
+      font-size: clamp(3.15rem, 8vw, 6.5rem);
+      line-height: .94;
+      letter-spacing: -.07em;
+      max-width: 760px;
     }
 
     .subtitle {
       margin: 0;
-      max-width: 620px;
+      max-width: 760px;
       color: var(--muted);
-      font-size: clamp(1.1rem, 2vw, 1.35rem);
+      font-size: clamp(1.08rem, 2.1vw, 1.45rem);
       line-height: 1.45;
       font-weight: 650;
+    }
+
+    .cta {
+      margin-top: 4px;
     }
 
     .small-buttons {
       display: flex;
       flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 4px;
+      gap: 14px;
+      margin-top: 6px;
     }
 
     .game-btn {
@@ -107,7 +176,6 @@
       background: none;
       cursor: pointer;
       font: inherit;
-      -webkit-tap-highlight-color: transparent;
     }
 
     .game-pill-bg {
@@ -159,130 +227,189 @@
     }
 
     .primary .game-pill-bg {
-      min-width: 260px;
-      min-height: 72px;
+      min-width: 270px;
+      min-height: 76px;
     }
 
     .primary .game-pill {
-      min-height: 72px;
+      min-height: 76px;
       padding: 18px 42px;
-      font-size: clamp(1.15rem, 3vw, 1.6rem);
+      font-size: clamp(1.2rem, 2.5vw, 1.75rem);
     }
-
-    .game-btn:hover { transform: translateY(-1px); }
-    .game-btn:active { transform: translateY(1px); }
-    .game-btn:focus-visible { outline: 4px solid rgba(3, 65, 151, .35); outline-offset: 5px; border-radius: 999px; }
 
     .placeholder-card {
       width: 100%;
-      min-height: 420px;
+      min-height: 500px;
       border-radius: var(--radius-xl);
-      border: 3px solid var(--deep-blue);
-      background: rgba(255, 255, 255, .88);
-      box-shadow: 0 18px 0 var(--deep-blue), 0 24px 36px rgba(0, 29, 71, .22);
-      padding: 18px;
+      border: 4px solid var(--deep-blue);
+      background: rgba(255, 255, 255, .78);
+      box-shadow: 0 18px 0 var(--deep-blue), 0 24px 36px rgba(0, 29, 71, .18);
+      padding: 26px;
     }
 
     .placeholder {
       height: 100%;
-      min-height: 380px;
-      border-radius: 28px;
-      border: 4px dashed rgba(0, 29, 71, .72);
+      min-height: 440px;
+      border-radius: 30px;
+      border: 5px dashed rgba(0, 29, 71, .58);
       background:
-        linear-gradient(135deg, rgba(255,255,255,.78), rgba(157,223,255,.62)),
-        repeating-linear-gradient(45deg, rgba(0,29,71,.055) 0 10px, transparent 10px 20px);
+        linear-gradient(135deg, rgba(255,255,255,.72), rgba(202,223,238,.46)),
+        repeating-linear-gradient(45deg, rgba(0,29,71,.04) 0 10px, transparent 10px 20px);
       display: grid;
       place-items: center;
-      padding: 28px;
+      padding: 32px;
       text-align: center;
       color: var(--deep-blue);
     }
 
     .placeholder-inner {
       display: grid;
-      gap: 12px;
+      gap: 14px;
       justify-items: center;
-      max-width: 340px;
+      max-width: 360px;
     }
 
     .phone-icon {
-      width: 78px;
-      height: 78px;
+      width: 84px;
+      height: 84px;
       display: grid;
       place-items: center;
       border-radius: 24px;
       border: 2px solid var(--btn-border);
       background: linear-gradient(180deg, var(--gloss-top), var(--gloss-mid));
       box-shadow: 0 5px 8px rgba(0, 0, 0, .22);
-      font-size: 2.1rem;
+      font-size: 2.2rem;
     }
 
     .placeholder strong {
-      font-size: clamp(1.35rem, 3vw, 2rem);
-      line-height: 1.1;
+      font-size: clamp(1.5rem, 3vw, 2.3rem);
+      line-height: 1.08;
     }
 
     .placeholder span {
       color: var(--muted);
       font-weight: 700;
+      font-size: 1.05rem;
+      line-height: 1.45;
     }
 
-    .cta {
-      margin-top: 10px;
+    .bottom-bar {
+      background: var(--footer-bg);
+      border-top: 1px solid rgba(0, 29, 71, .18);
+      padding: 34px 0 36px;
     }
 
-    @media (min-width: 860px) {
+    .bottom-bar p {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.45;
+    }
+
+    .bottom-bar p:last-child { margin-bottom: 0; }
+
+    .bottom-bar strong {
+      color: var(--deep-blue);
+      font-size: 1.05rem;
+    }
+
+    @media (min-width: 980px) {
       .page {
         grid-template-columns: 1.02fr .98fr;
-        gap: 42px;
+        gap: 54px;
+      }
+    }
+
+    @media (max-width: 740px) {
+      .container { width: min(100% - 24px, var(--max-width)); }
+      .top-bar { height: auto; padding: 10px 0; }
+      .top-bar-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .lang-btn {
+        width: 54px;
+        height: 54px;
+        font-size: .95rem;
+      }
+      .hero-wrap { padding: 34px 0 40px; }
+      .placeholder-card {
+        min-height: 400px;
+        padding: 18px;
+      }
+      .placeholder {
+        min-height: 350px;
+        padding: 24px;
       }
     }
   </style>
 </head>
-
 <body>
-  <main class="page">
-    <section class="content" aria-label="Presentazione Lumi">
-      <div class="eyebrow">✨ App educativa bambini</div>
-
-      <h1>Lumi — World of Fables</h1>
-
-      <p class="subtitle">
-        Un'avventura interattiva pensata per aiutare i bambini a esplorare le fiabe,
-        ricostruire le scene e allenare memoria visiva, comprensione narrativa e logica.
-      </p>
-
-      <nav class="small-buttons" aria-label="Link principali">
-        <a class="game-btn" href="#regole">
-          <span class="game-pill-bg"><span class="game-pill">Regole di gioco</span></span>
-        </a>
-        <a class="game-btn" href="#privacy-policy">
-          <span class="game-pill-bg"><span class="game-pill">Privacy e Policy</span></span>
-        </a>
-        <a class="game-btn" href="#chi-siamo">
-          <span class="game-pill-bg"><span class="game-pill">Chi siamo</span></span>
-        </a>
-      </nav>
-
-      <a class="game-btn primary cta" href="https://apps.apple.com/app/id6773034104" target="_blank" rel="noopener noreferrer">
-        <span class="game-pill-bg"><span class="game-pill">Inizia avventura →</span></span>
-      </a>
-    </section>
-
-    <section class="placeholder-card" aria-label="Placeholder screenshot app">
-      <div class="placeholder">
-        <!--
-          Per aggiungere lo screenshot:
-          sostituisci il blocco .placeholder-inner con:
-          <img src="screenshot-app.png" alt="Screenshot di Lumi — World of Fables" />
-        -->
-        <div class="placeholder-inner">
-          <div class="phone-icon" aria-hidden="true">📱</div>
-          <strong>Placeholder da aggiungere</strong>
-          <span>Qui puoi inserire lo screen dell'app</span>
-        </div>
+  <header class="top-bar">
+    <div class="container top-bar-inner">
+      <div class="brand">
+        <div class="brand-icon">📘</div>
+        <span>Lumi</span>
       </div>
-    </section>
+
+      <div class="lang-switch" aria-label="Selettore lingua">
+        <span class="lang-btn">IT</span>
+        <span class="lang-btn">EN</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="hero-wrap">
+    <div class="container page">
+      <section class="content" aria-label="Presentazione Lumi">
+        <div class="eyebrow">✨ App educativa bambini</div>
+
+        <h1>Lumi: World Of Fables</h1>
+
+        <p class="subtitle">
+          Un'avventura interattiva per ricostruire le fiabe, una scena alla volta.
+        </p>
+
+        <a class="game-btn primary cta" href="https://apps.apple.com/app/id6773034104" target="_blank" rel="noopener noreferrer">
+          <span class="game-pill-bg"><span class="game-pill">Inizia avventura! →</span></span>
+        </a>
+
+        <nav class="small-buttons" aria-label="Link principali">
+          <a class="game-btn" href="#regole">
+            <span class="game-pill-bg"><span class="game-pill">Regole di gioco</span></span>
+          </a>
+          <a class="game-btn" href="#privacy-policy">
+            <span class="game-pill-bg"><span class="game-pill">Privacy e Policy</span></span>
+          </a>
+          <a class="game-btn" href="#chi-siamo">
+            <span class="game-pill-bg"><span class="game-pill">Chi siamo</span></span>
+          </a>
+        </nav>
+      </section>
+
+      <section class="placeholder-card" aria-label="Placeholder screenshot app">
+        <div class="placeholder">
+          <!--
+            Per aggiungere lo screenshot:
+            sostituisci il blocco .placeholder-inner con:
+            <img src="screenshot-app.png" alt="Screenshot di Lumi — World of Fables" />
+          -->
+          <div class="placeholder-inner">
+            <div class="phone-icon" aria-hidden="true">📱</div>
+            <strong>Inserisci qui lo screenshot dell'app</strong>
+            <span>Formato consigliato: PNG/JPG, verticale o iPad</span>
+          </div>
+        </div>
+      </section>
+    </div>
   </main>
+
+  <footer class="bottom-bar">
+    <div class="container">
+      <p><strong>© 2026 Lumi: World Of Fables</strong></p>
+      <p>iOS, ottimizzata per iPad. Verificare compatibilità iPhone se necessario.</p>
+      <p>OpenDyslexic font by Abelardo Gonzalez, SIL Open Font License.</p>
+    </div>
+  </footer>
 </body>
 </html>
