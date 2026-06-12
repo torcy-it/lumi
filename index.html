@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Lumi: World Of Fables | App educativa per bambini</title>
+  <meta
+    name="description"
+    content="Lumi: World Of Fables è un'app iOS educativa per bambini: ricostruisci le fiabe, esplora una mappa magica e sviluppa comprensione narrativa, memoria visiva e sequenziamento logico."
+  />
+
+  <meta property="og:title" content="Lumi: World Of Fables" />
+  <meta
+    property="og:description"
+    content="Un'avventura interattiva per ricostruire le fiabe, una scena alla volta."
+  />
+  <meta property="og:type" content="website" />
+
+  <style>
+    :root {
+      --sky: #9dd9f3;
+      --sky-soft: #eaf8ff;
+      --forest: #2f6f4e;
+      --forest-dark: #214f39;
+      --leaf: #78b86f;
+      --gold: #e0ad3f;
+      --gold-soft: #fff1c9;
+      --cream: #fffaf0;
+      --white: #ffffff;
+      --ink: #22312b;
+      --muted: #5f6f68;
+      --card: rgba(255, 255, 255, 0.82);
+      --shadow: 0 18px 45px rgba(33, 79, 57, 0.15);
+      --radius-lg: 28px;
+      --radius-md: 18px;
+      --max-width: 1120px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(224, 173, 63, 0.22), transparent 28rem),
+        linear-gradient(180deg, var(--sky-soft) 0%, var(--cream) 48%, #f4fff5 100%);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    img,
+    svg {
+      max-width: 100%;
+      display: block;
+    }
+
+    .container {
+      width: min(100% - 32px, var(--max-width));
+      margin-inline: auto;
+    }
+
+    .skip-link {
+      position: absolute;
+      left: -999px;
+      top: 12px;
+      background: var(--forest-dark);
+      color: white;
+      padding: 10px 14px;
+      border-radius: 10px;
+      z-index: 999;
+    }
+
+    .skip-link:focus {
+      left: 12px;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(16px);
+      background: rgba(234, 248, 255, 0.78);
+      border-bottom: 1px solid rgba(47, 111, 78, 0.12);
+    }
+
+    .nav {
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 850;
+      letter-spacing: -0.03em;
+      text-decoration: none;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--gold), #ffe18a);
+      box-shadow: 0 8px 22px rgba(224, 173, 63, 0.32);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .language-toggle {
+      border: 1px solid rgba(47, 111, 78, 0.24);
+      background: rgba(255, 255, 255, 0.78);
+      border-radius: 999px;
+      padding: 4px;
+      display: inline-flex;
+      gap: 4px;
+    }
+
+    .language-toggle button {
+      border: 0;
+      border-radius: 999px;
+      padding: 8px 11px;
+      background: transparent;
+      color: var(--forest-dark);
+      font-weight: 750;
+      cursor: pointer;
+    }
+
+    .language-toggle button[aria-pressed="true"] {
+      background: var(--forest);
+      color: white;
+    }
+
+    .small-cta {
+      display: none;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 48px;
+      padding: 13px 20px;
+      border-radius: 999px;
+      border: 0;
+      font-weight: 800;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
+      background: var(--forest);
+      color: white;
+      box-shadow: 0 16px 32px rgba(47, 111, 78, 0.26);
+    }
+
+    .btn-primary:hover {
+      background: var(--forest-dark);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.72);
+      color: var(--forest-dark);
+      border: 1px solid rgba(47, 111, 78, 0.18);
+    }
+
+    .hero {
+      padding: 64px 0 56px;
+      overflow: hidden;
+    }
+
+    .hero-grid {
+      display: grid;
+      gap: 36px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      border: 1px solid rgba(224, 173, 63, 0.34);
+      background: rgba(255, 241, 201, 0.72);
+      color: #71510c;
+      padding: 8px 13px;
+      border-radius: 999px;
+      font-weight: 750;
+      font-size: 0.92rem;
+    }
+
+    h1,
+    h2,
+    h3 {
+      line-height: 1.08;
+      letter-spacing: -0.045em;
+      margin: 0;
+      color: var(--forest-dark);
+    }
+
+    h1 {
+      font-size: clamp(2.6rem, 10vw, 5.6rem);
+      margin-top: 18px;
+    }
+
+    h2 {
+      font-size: clamp(2rem, 6vw, 3.4rem);
+    }
+
+    h3 {
+      font-size: 1.25rem;
+    }
+
+    .lead {
+      font-size: clamp(1.08rem, 2vw, 1.32rem);
+      color: var(--muted);
+      max-width: 680px;
+      margin: 20px 0 0;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .trust-row {
+      display: grid;
+      gap: 10px;
+      margin-top: 28px;
+      color: var(--forest-dark);
+      font-weight: 720;
+    }
+
+    .trust-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mockup-card {
+      position: relative;
+      min-height: 480px;
+      border-radius: var(--radius-lg);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.7), rgba(255,250,240,0.92)),
+        radial-gradient(circle at 20% 20%, rgba(157, 217, 243, 0.7), transparent 18rem);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(47, 111, 78, 0.12);
+      padding: 24px;
+      overflow: hidden;
+    }
+
+    .mockup-scene {
+      height: 100%;
+      min-height: 430px;
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at 70% 20%, #fff4c9 0 8%, transparent 9%),
+        linear-gradient(180deg, #b7e7fb 0%, #dff7ff 48%, #a9d990 49%, #69a96a 100%);
+      position: relative;
+      overflow: hidden;
+      border: 8px solid rgba(255, 255, 255, 0.75);
+    }
+
+    .path {
+      position: absolute;
+      left: 50%;
+      bottom: -60px;
+      width: 180px;
+      height: 330px;
+      background: #f4d99b;
+      transform: translateX(-50%) rotate(5deg);
+      clip-path: polygon(40% 0, 70% 0, 100% 100%, 0 100%);
+      opacity: 0.95;
+    }
+
+    .hill {
+      position: absolute;
+      bottom: -44px;
+      width: 70%;
+      height: 160px;
+      background: #4f9959;
+      border-radius: 50% 50% 0 0;
+    }
+
+    .hill.left {
+      left: -18%;
+    }
+
+    .hill.right {
+      right: -18%;
+      background: #5eaa63;
+    }
+
+    .castle {
+      position: absolute;
+      right: 44px;
+      top: 78px;
+      width: 120px;
+      height: 120px;
+      background: rgba(255, 250, 240, 0.82);
+      border-radius: 18px 18px 10px 10px;
+      box-shadow: 0 14px 35px rgba(33, 79, 57, 0.16);
+    }
+
+    .castle::before,
+    .castle::after {
+      content: "";
+      position: absolute;
+      top: -34px;
+      width: 36px;
+      height: 76px;
+      background: rgba(255, 250, 240, 0.9);
+      border-radius: 14px 14px 6px 6px;
+    }
+
+    .castle::before {
+      left: 12px;
+    }
+
+    .castle::after {
+      right: 12px;
+    }
+
+    .card-stack {
+      position: absolute;
+      left: 28px;
+      bottom: 34px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .mini-card {
+      width: 155px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.92);
+      padding: 12px;
+      box-shadow: 0 12px 28px rgba(33, 79, 57, 0.18);
+      border: 1px solid rgba(47, 111, 78, 0.1);
+    }
+
+    .mini-card span {
+      display: block;
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(47, 111, 78, 0.16);
+      margin-top: 8px;
+    }
+
+    .mini-card .picture {
+      height: 70px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--gold-soft), var(--sky));
+    }
+
+    .floating-badge {
+      position: absolute;
+      right: 22px;
+      bottom: 26px;
+      width: min(240px, calc(100% - 44px));
+      border-radius: 22px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.88);
+      box-shadow: 0 16px 36px rgba(33, 79, 57, 0.18);
+      border: 1px solid rgba(47, 111, 78, 0.12);
+      font-weight: 760;
+      color: var(--forest-dark);
+    }
+
+    section {
+      padding: 62px 0;
+    }
+
+    .section-head {
+      max-width: 760px;
+      margin-bottom: 30px;
+    }
+
+    .section-head p {
+      color: var(--muted);
+      font-size: 1.08rem;
+      margin: 16px 0 0;
+    }
+
+    .grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .cards-3 {
+      grid-template-columns: 1fr;
+    }
+
+    .cards-2 {
+      grid-template-columns: 1fr;
+    }
+
+    .card {
+      border-radius: var(--radius-md);
+      background: var(--card);
+      border: 1px solid rgba(47, 111, 78, 0.12);
+      box-shadow: 0 12px 32px rgba(33, 79, 57, 0.08);
+      padding: 24px;
+    }
+
+    .icon {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      background: var(--gold-soft);
+      color: var(--forest-dark);
+      margin-bottom: 16px;
+      font-size: 1.35rem;
+    }
+
+    .card p {
+      color: var(--muted);
+      margin: 10px 0 0;
+    }
+
+    .story-panel {
+      display: grid;
+      gap: 24px;
+      align-items: center;
+      border-radius: var(--radius-lg);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.86), rgba(255,250,240,0.72)),
+        radial-gradient(circle at top right, rgba(157, 217, 243, 0.48), transparent 18rem);
+      padding: clamp(24px, 5vw, 44px);
+      border: 1px solid rgba(47, 111, 78, 0.12);
+      box-shadow: var(--shadow);
+    }
+
+    .story-illustration {
+      min-height: 300px;
+      border-radius: 26px;
+      background:
+        radial-gradient(circle at 72% 24%, var(--gold) 0 9%, transparent 10%),
+        linear-gradient(180deg, #c9effd 0%, #effcff 52%, #91c978 53%, #3f8556 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tree {
+      position: absolute;
+      bottom: 0;
+      width: 70px;
+      height: 170px;
+      background: #7b5536;
+      border-radius: 28px 28px 0 0;
+    }
+
+    .tree::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: -70px;
+      width: 140px;
+      height: 140px;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      background: #2f6f4e;
+      box-shadow: 46px 28px 0 #45885d, -42px 34px 0 #5eaa63;
+    }
+
+    .tree.one {
+      left: 52px;
+    }
+
+    .tree.two {
+      right: 86px;
+      transform: scale(0.82);
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .step-number {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--forest);
+      color: white;
+      font-weight: 900;
+      box-shadow: 0 10px 20px rgba(47, 111, 78, 0.2);
+    }
+
+    .feature-list {
+      display: grid;
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .feature-list li {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      color: var(--muted);
+    }
+
+    .feature-list li::before {
+      content: "✦";
+      color: var(--gold);
+      font-weight: 900;
+      margin-top: 1px;
+    }
+
+    .privacy {
+      background:
+        linear-gradient(180deg, rgba(47, 111, 78, 0.94), rgba(33, 79, 57, 0.96)),
+        radial-gradient(circle at top left, rgba(224, 173, 63, 0.35), transparent 18rem);
+      color: white;
+    }
+
+    .privacy h2,
+    .privacy h3 {
+      color: white;
+    }
+
+    .privacy .section-head p,
+    .privacy .card p,
+    .privacy .feature-list li {
+      color: rgba(255, 255, 255, 0.82);
+    }
+
+    .privacy .card {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.15);
+      box-shadow: none;
+    }
+
+    .privacy .icon {
+      background: rgba(255, 241, 201, 0.16);
+      color: #ffe49a;
+    }
+
+    .team-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 9px 13px;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(47, 111, 78, 0.13);
+      color: var(--forest-dark);
+      font-weight: 720;
+    }
+
+    .contact-panel {
+      border-radius: var(--radius-lg);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,241,201,0.45));
+      border: 1px solid rgba(47, 111, 78, 0.12);
+      box-shadow: var(--shadow);
+      padding: clamp(24px, 5vw, 44px);
+      display: grid;
+      gap: 22px;
+    }
+
+    footer {
+      padding: 34px 0;
+      color: var(--muted);
+      border-top: 1px solid rgba(47, 111, 78, 0.12);
+      background: rgba(255, 250, 240, 0.62);
+      font-size: 0.95rem;
+    }
+
+    .footer-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    [data-lang] {
+      display: none;
+    }
+
+    html[data-current-lang="it"] [data-lang="it"],
+    html[data-current-lang="en"] [data-lang="en"] {
+      display: revert;
+    }
+
+    .fade-in {
+      animation: fadeIn 0.75s ease both;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.001ms !important;
+        transition-duration: 0.001ms !important;
+      }
+    }
+
+    @media (min-width: 760px) {
+      .hero {
+        padding: 86px 0 76px;
+      }
+
+      .hero-grid {
+        grid-template-columns: 1.02fr 0.98fr;
+      }
+
+      .cards-3 {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .cards-2 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .story-panel {
+        grid-template-columns: 1fr 0.9fr;
+      }
+
+      .contact-panel {
+        grid-template-columns: 1.2fr auto;
+        align-items: center;
+      }
+
+      .trust-row {
+        grid-template-columns: repeat(3, max-content);
+      }
+
+      .small-cta {
+        display: inline-flex;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr auto;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Salta al contenuto principale</a>
+
+  <header>
+    <nav class="container nav" aria-label="Navigazione principale">
+      <a class="brand" href="#top" aria-label="Lumi: World Of Fables home">
+        <span class="brand-mark" aria-hidden="true">✨</span>
+        <span>Lumi</span>
+      </a>
+
+      <div class="nav-actions">
+        <div class="language-toggle" aria-label="Seleziona lingua">
+          <button type="button" id="itBtn" aria-pressed="true">IT</button>
+          <button type="button" id="enBtn" aria-pressed="false">EN</button>
+        </div>
+
+        <a
+          class="btn btn-primary small-cta"
+          href="https://apps.apple.com/app/id6773034104"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          App Store
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="container hero-grid">
+        <div class="fade-in">
+          <div class="eyebrow">
+            <span aria-hidden="true">📚</span>
+            <span data-lang="it">App educativa iOS per bambini</span>
+            <span data-lang="en">Educational iOS app for children</span>
+          </div>
+
+          <h1>Lumi: World Of Fables</h1>
+
+          <p class="lead" data-lang="it">
+            Un'avventura interattiva per ricostruire le fiabe, una scena alla volta.
+          </p>
+          <p class="lead" data-lang="en">
+            An interactive adventure to rebuild fairy tales, one scene at a time.
+          </p>
+
+          <div class="hero-actions">
+            <a
+              class="btn btn-primary"
+              href="https://apps.apple.com/app/id6773034104"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-lang="it"
+            >
+              Scarica su App Store
+            </a>
+
+            <a
+              class="btn btn-primary"
+              href="https://apps.apple.com/app/id6773034104"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-lang="en"
+            >
+              Download on the App Store
+            </a>
+
+            <a class="btn btn-secondary" href="#privacy" data-lang="it">
+              Privacy per famiglie
+            </a>
+            <a class="btn btn-secondary" href="#privacy" data-lang="en">
+              Privacy for families
+            </a>
+          </div>
+
+          <div class="trust-row" aria-label="Punti di fiducia">
+            <div class="trust-item">
+              <span aria-hidden="true">🛡️</span>
+              <span data-lang="it">Nessun account</span>
+              <span data-lang="en">No account</span>
+            </div>
+            <div class="trust-item">
+              <span aria-hidden="true">🚫</span>
+              <span data-lang="it">Nessuna pubblicità</span>
+              <span data-lang="en">No ads</span>
+            </div>
+            <div class="trust-item">
+              <span aria-hidden="true">🔒</span>
+              <span data-lang="it">Dati salvati in locale</span>
+              <span data-lang="en">Local-only progress</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mockup-card fade-in" aria-label="Illustrazione placeholder dell'app">
+          <div class="mockup-scene">
+            <div class="castle" aria-hidden="true"></div>
+            <div class="hill left" aria-hidden="true"></div>
+            <div class="hill right" aria-hidden="true"></div>
+            <div class="path" aria-hidden="true"></div>
+
+            <div class="card-stack" aria-hidden="true">
+              <div class="mini-card">
+                <div class="picture"></div>
+                <span></span>
+                <span style="width: 70%;"></span>
+              </div>
+              <div class="mini-card">
+                <div class="picture"></div>
+                <span></span>
+                <span style="width: 55%;"></span>
+              </div>
+            </div>
+
+            <div class="floating-badge">
+              <span data-lang="it">Prima fiaba: Cappuccetto Rosso</span>
+              <span data-lang="en">First tale: Little Red Riding Hood</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="container story-panel">
+        <div>
+          <div class="section-head">
+            <h2 data-lang="it">Cos'è Lumi</h2>
+            <h2 data-lang="en">What is Lumi?</h2>
+
+            <p data-lang="it">
+              Lumi: World Of Fables è un'app educativa per bambini e bambine che aiuta a sviluppare
+              comprensione narrativa, sequenziamento logico degli eventi, attenzione e memoria visiva.
+            </p>
+
+            <p data-lang="en">
+              Lumi: World Of Fables is an educational app for children that supports narrative
+              comprehension, logical event sequencing, attention and visual memory.
+            </p>
+          </div>
+
+          <p data-lang="it">
+            Il piccolo Lumi vive in un mondo magico ed è amico di tutti i personaggi delle fiabe.
+            Il malvagio mago Lord Tempus, geloso di non avere una storia tutta sua, lancia un
+            incantesimo e mescola le scene di tutte le fiabe. Il giocatore esplora una mappa
+            interattiva, raggiunge i capitoli tramite waypoint e ricostruisce le storie mettendo
+            le scene nell'ordine giusto.
+          </p>
+
+          <p data-lang="en">
+            Little Lumi lives in a magical world and is friends with every fairy-tale character.
+            The wicked wizard Lord Tempus, jealous of not having a story of his own, casts a spell
+            and mixes up the scenes from all the tales. Players explore an interactive map, reach
+            chapters through waypoints and rebuild each story by placing scenes in the right order.
+          </p>
+        </div>
+
+        <div class="story-illustration" aria-hidden="true">
+          <div class="tree one"></div>
+          <div class="tree two"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="how">
+      <div class="container">
+        <div class="section-head">
+          <h2 data-lang="it">Come si gioca</h2>
+          <h2 data-lang="en">How it works</h2>
+
+          <p data-lang="it">
+            Un percorso semplice, guidato e pensato per accompagnare il bambino passo dopo passo.
+          </p>
+          <p data-lang="en">
+            A simple, guided experience designed to support children one step at a time.
+          </p>
+        </div>
+
+        <div class="grid cards-2">
+          <article class="card step">
+            <div class="step-number">1</div>
+            <div>
+              <h3 data-lang="it">Esplora la mappa</h3>
+              <h3 data-lang="en">Explore the map</h3>
+              <p data-lang="it">
+                Cammina nel mondo di Lumi e raggiungi i waypoint che portano ai capitoli.
+              </p>
+              <p data-lang="en">
+                Move through Lumi’s world and reach the waypoints that unlock chapters.
+              </p>
+            </div>
+          </article>
+
+          <article class="card step">
+            <div class="step-number">2</div>
+            <div>
+              <h3 data-lang="it">Entra nella storia</h3>
+              <h3 data-lang="en">Enter the story</h3>
+              <p data-lang="it">
+                Vivi dialoghi, introduzioni narrative e piccoli momenti di scoperta.
+              </p>
+              <p data-lang="en">
+                Enjoy dialogues, narrative introductions and small moments of discovery.
+              </p>
+            </div>
+          </article>
+
+          <article class="card step">
+            <div class="step-number">3</div>
+            <div>
+              <h3 data-lang="it">Ordina le scene</h3>
+              <h3 data-lang="en">Sequence the scenes</h3>
+              <p data-lang="it">
+                Trascina le carte nell'ordine corretto per ricostruire la fiaba.
+              </p>
+              <p data-lang="en">
+                Drag the cards into the correct order to rebuild the fairy tale.
+              </p>
+            </div>
+          </article>
+
+          <article class="card step">
+            <div class="step-number">4</div>
+            <div>
+              <h3 data-lang="it">Usa gli indizi</h3>
+              <h3 data-lang="en">Use helpful clues</h3>
+              <p data-lang="it">
+                Gira le carte per leggere brevi suggerimenti testuali quando serve aiuto.
+              </p>
+              <p data-lang="en">
+                Flip the cards to read short text clues whenever help is needed.
+              </p>
+            </div>
+          </article>
+
+          <article class="card step">
+            <div class="step-number">5</div>
+            <div>
+              <h3 data-lang="it">Sblocca il libro delle fiabe</h3>
+              <h3 data-lang="en">Unlock the book of fables</h3>
+              <p data-lang="it">
+                Completa i capitoli e, sui dispositivi compatibili, visualizza le carte in Realtà Aumentata.
+              </p>
+              <p data-lang="en">
+                Complete chapters and, on compatible devices, view the cards in Augmented Reality.
+              </p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="benefits">
+      <div class="container">
+        <div class="section-head">
+          <h2 data-lang="it">Perché è utile</h2>
+          <h2 data-lang="en">Why it is useful</h2>
+
+          <p data-lang="it">
+            Lumi unisce gioco, narrazione e logica per rendere l'apprendimento naturale e coinvolgente.
+          </p>
+          <p data-lang="en">
+            Lumi combines play, storytelling and logic to make learning natural and engaging.
+          </p>
+        </div>
+
+        <div class="grid cards-3">
+          <article class="card">
+            <div class="icon" aria-hidden="true">🧠</div>
+            <h3 data-lang="it">Comprensione narrativa</h3>
+            <h3 data-lang="en">Narrative comprehension</h3>
+            <p data-lang="it">
+              Aiuta a riconoscere personaggi, cause, conseguenze e struttura della storia.
+            </p>
+            <p data-lang="en">
+              Helps children recognise characters, causes, consequences and story structure.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="icon" aria-hidden="true">🔢</div>
+            <h3 data-lang="it">Sequenziamento logico</h3>
+            <h3 data-lang="en">Logical sequencing</h3>
+            <p data-lang="it">
+              Il minigioco invita a ragionare sull'ordine corretto degli eventi.
+            </p>
+            <p data-lang="en">
+              The mini-game encourages reasoning about the correct order of events.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="icon" aria-hidden="true">👀</div>
+            <h3 data-lang="it">Attenzione e memoria visiva</h3>
+            <h3 data-lang="en">Attention and visual memory</h3>
+            <p data-lang="it">
+              Le carte illustrate supportano osservazione, confronto e ricordo delle scene.
+            </p>
+            <p data-lang="en">
+              Illustrated cards support observation, comparison and memory of each scene.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="features">
+      <div class="container">
+        <div class="section-head">
+          <h2 data-lang="it">Funzionalità</h2>
+          <h2 data-lang="en">Features</h2>
+
+          <p data-lang="it">
+            Una fiaba disponibile ora, Cappuccetto Rosso, con altre isole in arrivo.
+          </p>
+          <p data-lang="en">
+            One fairy tale available now, Little Red Riding Hood, with more islands coming soon.
+          </p>
+        </div>
+
+        <div class="grid cards-2">
+          <article class="card">
+            <div class="icon" aria-hidden="true">🗺️</div>
+            <h3 data-lang="it">Esplorazione e capitoli</h3>
+            <h3 data-lang="en">Exploration and chapters</h3>
+
+            <ul class="feature-list">
+              <li data-lang="it">Mappa interattiva con esplorazione guidata</li>
+              <li data-lang="en">Interactive map with guided exploration</li>
+
+              <li data-lang="it">Libro delle fiabe con capitoli sbloccabili</li>
+              <li data-lang="en">Book of fables with unlockable chapters</li>
+
+              <li data-lang="it">Tutorial interattivo integrato</li>
+              <li data-lang="en">Built-in interactive tutorial</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <div class="icon" aria-hidden="true">🃏</div>
+            <h3 data-lang="it">Gioco e apprendimento</h3>
+            <h3 data-lang="en">Play and learning</h3>
+
+            <ul class="feature-list">
+              <li data-lang="it">Minigioco di ordinamento delle scene</li>
+              <li data-lang="en">Scene-ordering mini-game</li>
+
+              <li data-lang="it">Carte con indizi testuali</li>
+              <li data-lang="en">Cards with text clues</li>
+
+              <li data-lang="it">Musica ed effetti sonori immersivi</li>
+              <li data-lang="en">Immersive music and sound effects</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <div class="icon" aria-hidden="true">🌍</div>
+            <h3 data-lang="it">Lingue e accessibilità</h3>
+            <h3 data-lang="en">Languages and accessibility</h3>
+
+            <ul class="feature-list">
+              <li data-lang="it">Supporto multilingue, circa 10 lingue</li>
+              <li data-lang="en">Multilingual support, around 10 languages</li>
+
+              <li data-lang="it">VoiceOver, contrasto elevato e font OpenDyslexic</li>
+              <li data-lang="en">VoiceOver, high contrast and OpenDyslexic font</li>
+
+              <li data-lang="it">Interfaccia leggibile anche da mobile</li>
+              <li data-lang="en">Readable interface, including on mobile</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <div class="icon" aria-hidden="true">📱</div>
+            <h3 data-lang="it">iOS e Realtà Aumentata</h3>
+            <h3 data-lang="en">iOS and Augmented Reality</h3>
+
+            <ul class="feature-list">
+              <li data-lang="it">Ottimizzata per iPad</li>
+              <li data-lang="en">Optimized for iPad</li>
+
+              <li data-lang="it">ARKit opzionale sui dispositivi compatibili</li>
+              <li data-lang="en">Optional ARKit on compatible devices</li>
+
+              <li data-lang="it">Nessuna registrazione o upload di foto</li>
+              <li data-lang="en">No photo recording or uploads</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="privacy" id="privacy">
+      <div class="container">
+        <div class="section-head">
+          <h2 data-lang="it">Privacy per le famiglie</h2>
+          <h2 data-lang="en">Privacy for families</h2>
+
+          <p data-lang="it">
+            Lumi è pensata per i minori e progettata con un approccio semplice: meno dati, più sicurezza.
+          </p>
+          <p data-lang="en">
+            Lumi is designed for children with a simple approach: less data, more safety.
+          </p>
+        </div>
+
+        <div class="grid cards-3">
+          <article class="card">
+            <div class="icon" aria-hidden="true">🔐</div>
+            <h3 data-lang="it">Senza registrazione</h3>
+            <h3 data-lang="en">No registration</h3>
+            <p data-lang="it">
+              Non serve creare account. L'app non include pubblicità, acquisti in-app o tracciamento.
+            </p>
+            <p data-lang="en">
+              No account is required. The app has no ads, no in-app purchases and no tracking.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="icon" aria-hidden="true">💾</div>
+            <h3 data-lang="it">Dati in locale</h3>
+            <h3 data-lang="en">Local data</h3>
+            <p data-lang="it">
+              Progressi e preferenze vengono salvati solo sul dispositivo.
+            </p>
+            <p data-lang="en">
+              Progress and preferences are stored only on the device.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="icon" aria-hidden="true">📷</div>
+            <h3 data-lang="it">AR opzionale</h3>
+            <h3 data-lang="en">Optional AR</h3>
+            <p data-lang="it">
+              La fotocamera viene usata solo per la Realtà Aumentata, in locale e senza upload.
+            </p>
+            <p data-lang="en">
+              The camera is used only for Augmented Reality, locally and without uploads.
+            </p>
+          </article>
+        </div>
+
+        <div class="card" style="margin-top: 18px;">
+          <p data-lang="it">
+            <strong>Titolare del trattamento:</strong> Marcello Guida.
+            <br />
+            <strong>Ultimo aggiornamento privacy policy:</strong> 1 giugno 2026.
+          </p>
+
+          <p data-lang="en">
+            <strong>Data controller:</strong> Marcello Guida.
+            <br />
+            <strong>Last privacy policy update:</strong> June 1, 2026.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="team">
+      <div class="container">
+        <div class="section-head">
+          <h2 data-lang="it">Chi siamo</h2>
+          <h2 data-lang="en">About the team</h2>
+
+          <p data-lang="it">
+            Lumi nasce dal lavoro di un team multidisciplinare con attenzione a educazione, accessibilità,
+            esperienza utente e sicurezza.
+          </p>
+          <p data-lang="en">
+            Lumi was created by a multidisciplinary team focused on education, accessibility,
+            user experience and safety.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3 data-lang="it">Team di sviluppo</h3>
+          <h3 data-lang="en">Development team</h3>
+
+          <div class="team-list" aria-label="Team di sviluppo">
+            <span class="pill">Calisto Ciro</span>
+            <span class="pill">Chiappetta Giulia</span>
+            <span class="pill">De Marco Francesca</span>
+            <span class="pill">Guida Marcello</span>
+            <span class="pill">Karameta Albi</span>
+            <span class="pill">Toshpulatov Bobur</span>
+            <span class="pill">Torcicollo Adolfo</span>
+          </div>
+
+          <p style="margin-top: 22px;" data-lang="it">
+            <strong>Collaboratore:</strong> Razzino Alberto — Compositore audio.
+          </p>
+          <p style="margin-top: 22px;" data-lang="en">
+            <strong>Collaborator:</strong> Razzino Alberto — Audio composer.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="container">
+        <div class="contact-panel">
+          <div>
+            <h2 data-lang="it">Contatti</h2>
+            <h2 data-lang="en">Contact</h2>
+
+            <p data-lang="it">
+              Scrivici per assistenza, feedback, collaborazioni o richieste relative alla privacy.
+            </p>
+            <p data-lang="en">
+              Write to us for support, feedback, collaborations or privacy-related requests.
+            </p>
+
+            <p>
+              <strong>Email:</strong>
+              <a href="mailto:mguida2604@gmail.com?subject=WORLD%20OF%20FABLES%20app%20support">
+                mguida2604@gmail.com
+              </a>
+            </p>
+          </div>
+
+          <a
+            class="btn btn-primary"
+            href="mailto:mguida2604@gmail.com?subject=WORLD%20OF%20FABLES%20app%20support"
+            data-lang="it"
+          >
+            Scrivi al supporto
+          </a>
+
+          <a
+            class="btn btn-primary"
+            href="mailto:mguida2604@gmail.com?subject=WORLD%20OF%20FABLES%20app%20support"
+            data-lang="en"
+          >
+            Contact support
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-grid">
+      <div>
+        <strong>© 2026 Lumi: World Of Fables</strong>
+        <br />
+        <span data-lang="it">
+          iOS, ottimizzata per iPad. Verificare compatibilità iPhone se necessario.
+        </span>
+        <span data-lang="en">
+          iOS, optimized for iPad. Check iPhone compatibility if needed.
+        </span>
+        <br />
+        <span>
+          OpenDyslexic font by Abelardo Gonzalez, SIL Open Font License.
+        </span>
+      </div>
+
+      <a
+        href="https://apps.apple.com/app/id6773034104"
+        target="_blank"
+        rel="noopener noreferrer"
+        data-lang="it"
+      >
+        Scarica su App Store
+      </a>
+
+      <a
+        href="https://apps.apple.com/app/id6773034104"
+        target="_blank"
+        rel="noopener noreferrer"
+        data-lang="en"
+      >
+        Download on the App Store
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    const root = document.documentElement;
+    const itBtn = document.getElementById("itBtn");
+    const enBtn = document.getElementById("enBtn");
+
+    function setLanguage(lang) {
+      root.setAttribute("data-current-lang", lang);
+      root.setAttribute("lang", lang);
+
+      itBtn.setAttribute("aria-pressed", String(lang === "it"));
+      enBtn.setAttribute("aria-pressed", String(lang === "en"));
+
+      localStorage.setItem("lumi-language", lang);
+
+      document.title =
+        lang === "it"
+          ? "Lumi: World Of Fables | App educativa per bambini"
+          : "Lumi: World Of Fables | Educational app for children";
+    }
+
+    itBtn.addEventListener("click", () => setLanguage("it"));
+    enBtn.addEventListener("click", () => setLanguage("en"));
+
+    const savedLanguage = localStorage.getItem("lumi-language");
+    setLanguage(savedLanguage === "en" ? "en" : "it");
+  </script>
+</body>
+</html>
