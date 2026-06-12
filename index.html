@@ -28,6 +28,43 @@
       --radius-xl: 34px;
       --radius-lg: 24px;
       --max-width: 1120px;
+
+      /* === GameButtonAppearance === */
+      --gloss-top: #FDE549;
+      --gloss-mid: #FCDB00;
+      --gloss-bottom: #FCDB00;
+      --btn-border: #430303;
+      --btn-label: #262521;
+
+      --pill-font-size: 15px;
+      --pill-h-pad: 22px;
+      --pill-v-pad: 10px;
+      --pill-min-height: 44px;
+
+      --primary-width: 220px;
+      --primary-height: 60px;
+      --primary-font-size: 22px;
+      --primary-h-pad: 34px;
+      --primary-v-pad: 14px;
+
+      --circle-size: 48px;
+    }
+
+    @media (min-width: 768px) {
+      :root {
+        --pill-font-size: 17px;
+        --pill-h-pad: 26px;
+        --pill-v-pad: 12px;
+        --pill-min-height: 48px;
+
+        --primary-width: 260px;
+        --primary-height: 72px;
+        --primary-font-size: 25px;
+        --primary-h-pad: 42px;
+        --primary-v-pad: 18px;
+
+        --circle-size: 56px;
+      }
     }
 
     * { box-sizing: border-box; }
@@ -37,9 +74,9 @@
       font-family: ui-rounded, "SF Pro Rounded", Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       color: var(--ink);
       background:
-        radial-gradient(circle at 10% 10%, rgba(244, 200, 91, .35), transparent 24rem),
+        radial-gradient(circle at 10% 10%, rgba(253, 229, 73, .32), transparent 24rem),
         radial-gradient(circle at 90% 12%, rgba(3, 65, 151, .16), transparent 22rem),
-        linear-gradient(180deg, #e8f4ff 0%, #fff9de 56%, #f2fbff 100%);
+        linear-gradient(180deg, #87c8f0 0%, #e8f4ff 35%, #fff9de 68%, #f2fbff 100%);
       line-height: 1.6;
     }
 
@@ -53,9 +90,9 @@
       position: sticky;
       top: 0;
       z-index: 50;
-      background: rgba(232, 244, 255, .82);
+      background: rgba(135, 200, 240, .86);
       backdrop-filter: blur(18px);
-      border-bottom: 1px solid rgba(3, 65, 151, .12);
+      border-bottom: 1px solid rgba(67, 3, 3, .18);
     }
 
     .nav {
@@ -85,39 +122,154 @@
       object-fit: cover;
     }
 
-    .nav-center { display: none; gap: 8px; align-items: center; }
-
-    .nav-link, .lang-btn, .icon-tab {
-      border: 2px solid var(--deep-blue);
-      background: var(--cream);
-      color: var(--deep-blue);
-      border-radius: 999px;
-      font-weight: 950;
-      cursor: pointer;
-      box-shadow: 0 5px 0 var(--deep-blue);
-      transition: transform .16s ease, box-shadow .16s ease, filter .16s ease;
-    }
-
-    .nav-link {
-      padding: 9px 14px;
-      text-decoration: none;
-      font-size: .94rem;
-    }
-
-    .nav-link:hover, .lang-btn:hover, .icon-tab:hover, .game-button:hover {
-      transform: translateY(-2px);
-      filter: brightness(1.03);
-    }
-
-    .nav-link:active, .lang-btn:active, .icon-tab:active, .game-button:active {
-      transform: translateY(4px);
-      box-shadow: 0 1px 0 var(--deep-blue);
-    }
-
     .nav-actions { display: flex; align-items: center; gap: 8px; }
     .language-toggle { display: inline-flex; gap: 6px; }
-    .lang-btn { padding: 8px 10px; }
-    .lang-btn[aria-pressed="true"] { background: var(--royal-blue); color: white; }
+    .desktop-only { display: none; }
+
+    /* === Game buttons from app style === */
+    .game-btn {
+      appearance: none;
+      border: none;
+      background: none;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font: inherit;
+      color: inherit;
+      min-height: var(--pill-min-height);
+      transition: opacity 0.15s ease, transform 0.12s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .game-btn:hover { transform: translateY(-1px); }
+    .game-btn:active { transform: translateY(1px); }
+    .game-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+    .game-btn:focus-visible { outline: 4px solid rgba(3, 65, 151, .35); outline-offset: 5px; border-radius: 9999px; }
+
+    .game-pill-bg {
+      position: relative;
+      display: inline-flex;
+      border-radius: 9999px;
+      background: linear-gradient(180deg, var(--gloss-top) 0%, var(--gloss-mid) 50%, var(--gloss-bottom) 100%);
+      box-shadow: 0 3px 5px rgba(0, 0, 0, 0.28);
+      overflow: hidden;
+    }
+
+    .game-pill-bg::before {
+      content: "";
+      position: absolute;
+      top: 2px;
+      left: 13px;
+      right: 13px;
+      height: 22px;
+      border-radius: 9999px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.72) 0%, rgba(255, 255, 255, 0.08) 55%, transparent 100%);
+      pointer-events: none;
+    }
+
+    .game-pill-bg::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 9999px;
+      border: 2px solid var(--btn-border);
+      pointer-events: none;
+    }
+
+    .game-pill {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: var(--pill-v-pad) var(--pill-h-pad);
+      min-height: var(--pill-min-height);
+      font-size: var(--pill-font-size);
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: var(--btn-label);
+      text-shadow: 0 1px 0 rgba(0, 0, 0, 0.16);
+      white-space: nowrap;
+    }
+
+    .game-pill .icon { font-size: 0.92em; line-height: 1; }
+    .game-pill img.icon-img { width: 26px; height: 26px; object-fit: contain; }
+    .game-btn-pill .game-pill-bg { width: 100%; height: 100%; }
+    .game-btn-primary .game-pill-bg { min-width: var(--primary-width); min-height: var(--primary-height); }
+    .game-btn-primary .game-pill { font-size: var(--primary-font-size); padding: var(--primary-v-pad) var(--primary-h-pad); min-height: var(--primary-height); }
+
+    .game-btn-capsule {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 16px;
+      min-height: var(--pill-min-height);
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.88);
+      color: rgba(38, 37, 33, 0.72);
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: none;
+    }
+
+    .game-btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      padding: var(--pill-v-pad) 18px;
+      min-height: var(--pill-min-height);
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.22);
+      border: 1.5px solid rgba(255, 255, 255, 0.6);
+      color: #fff;
+      font-size: var(--pill-font-size);
+      font-weight: 700;
+      text-transform: none;
+    }
+
+    .game-btn-circle {
+      width: var(--circle-size);
+      height: var(--circle-size);
+      min-width: var(--circle-size);
+      min-height: var(--circle-size);
+      padding: 0;
+      border-radius: 50%;
+      position: relative;
+      background: linear-gradient(180deg, var(--gloss-top) 0%, var(--gloss-mid) 50%, var(--gloss-bottom) 100%);
+      box-shadow: 0 3px 5px rgba(0, 0, 0, 0.28);
+      color: var(--btn-label);
+      font-size: calc(var(--circle-size) * 0.28);
+      font-weight: 900;
+      text-shadow: 0 1px 0 rgba(0, 0, 0, 0.14);
+      overflow: hidden;
+    }
+
+    .game-btn-circle::before {
+      content: "";
+      position: absolute;
+      top: 2px;
+      left: 1px;
+      right: 1px;
+      height: 26px;
+      border-radius: 50%;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.72) 0%, rgba(255, 255, 255, 0.08) 55%, transparent 100%);
+      pointer-events: none;
+    }
+
+    .game-btn-circle::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 2px solid var(--btn-border);
+      pointer-events: none;
+    }
+
+    .game-btn-circle span { position: relative; z-index: 1; }
+    .game-btn-circle[aria-pressed="true"] { filter: saturate(1.2) brightness(.95); transform: translateY(1px); }
 
     .hero { padding: 54px 0 44px; overflow: hidden; }
     .hero-grid { display: grid; gap: 34px; align-items: center; }
@@ -127,13 +279,13 @@
       width: fit-content;
       align-items: center;
       gap: 8px;
-      border: 2px solid var(--deep-blue);
-      background: var(--gold);
-      color: var(--deep-blue);
+      border: 2px solid var(--btn-border);
+      background: linear-gradient(180deg, var(--gloss-top), var(--gloss-mid));
+      color: var(--btn-label);
       border-radius: 999px;
       padding: 9px 14px;
       font-weight: 950;
-      box-shadow: 0 5px 0 var(--deep-blue);
+      box-shadow: 0 3px 5px rgba(0,0,0,.22);
     }
 
     h1, h2, h3 { margin: 0; line-height: 1.06; letter-spacing: -.045em; color: var(--deep-blue); }
@@ -142,53 +294,15 @@
     h3 { font-size: 1.28rem; }
     p { margin: 0; }
     .lead { color: var(--muted); font-size: clamp(1.08rem, 2vw, 1.32rem); max-width: 690px; margin-top: 20px; }
-
-    .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 30px; }
-
-    .game-button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      min-height: 54px;
-      padding: 14px 22px;
-      border-radius: 999px;
-      border: 3px solid var(--deep-blue);
-      background: var(--gold);
-      color: var(--deep-blue);
-      font-weight: 1000;
-      text-decoration: none;
-      cursor: pointer;
-      box-shadow: var(--shadow-blue);
-      transition: transform .16s ease, box-shadow .16s ease, filter .16s ease;
-    }
-
-    .game-button.blue { background: var(--royal-blue); color: white; }
-    .game-button.paper { background: var(--paper); color: var(--deep-blue); }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 30px; align-items: center; }
 
     .quick-icons {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: 1fr;
       gap: 12px;
       margin-top: 28px;
-      max-width: 520px;
+      max-width: 620px;
     }
-
-    .icon-tab {
-      min-height: 86px;
-      padding: 10px;
-      display: grid;
-      place-items: center;
-      text-align: center;
-      text-decoration: none;
-      background: white;
-      border-radius: 22px;
-      font-size: .82rem;
-      line-height: 1.2;
-    }
-
-    .icon-tab img { width: 44px; height: 50px; object-fit: contain; margin-bottom: 5px; }
-    .icon-emoji { font-size: 1.9rem; line-height: 1; margin-bottom: 5px; }
 
     .phone-card {
       position: relative;
@@ -204,7 +318,7 @@
       min-height: 420px;
       border-radius: 28px;
       background:
-        radial-gradient(circle at 75% 22%, var(--gold) 0 7%, transparent 8%),
+        radial-gradient(circle at 75% 22%, var(--gloss-mid) 0 7%, transparent 8%),
         linear-gradient(180deg, #9ddfff 0%, #dff6ff 46%, #5da65c 47%, #2f6f4e 100%);
       border: 4px solid var(--deep-blue);
       position: relative;
@@ -248,7 +362,7 @@
       font-size: 1.2rem;
     }
     .waypoint.one { left: 32px; bottom: 72px; }
-    .waypoint.two { right: 42px; bottom: 118px; background: var(--gold); color: var(--deep-blue); }
+    .waypoint.two { right: 42px; bottom: 118px; background: var(--gloss-mid); color: var(--deep-blue); }
 
     section { padding: 58px 0; }
     .panel { display: none; }
@@ -275,9 +389,9 @@
       display: grid;
       place-items: center;
       border-radius: 18px;
-      background: var(--gold);
-      border: 3px solid var(--deep-blue);
-      box-shadow: 0 5px 0 var(--deep-blue);
+      background: linear-gradient(180deg, var(--gloss-top), var(--gloss-mid));
+      border: 2px solid var(--btn-border);
+      box-shadow: 0 3px 5px rgba(0,0,0,.24);
       font-size: 1.45rem;
       margin-bottom: 16px;
     }
@@ -297,7 +411,7 @@
       min-height: 300px;
       border-radius: 28px;
       background:
-        radial-gradient(circle at 72% 20%, var(--gold) 0 8%, transparent 9%),
+        radial-gradient(circle at 72% 20%, var(--gloss-mid) 0 8%, transparent 9%),
         linear-gradient(180deg, #9ddfff 0%, #e8f4ff 52%, #70b864 53%, #2f6f4e 100%);
       border: 3px solid var(--deep-blue);
       position: relative;
@@ -372,7 +486,12 @@
       *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .001ms !important; transition-duration: .001ms !important; }
     }
 
+    @media (min-width: 520px) {
+      .quick-icons { grid-template-columns: repeat(3, max-content); }
+    }
+
     @media (min-width: 820px) {
+      .desktop-only { display: inline-flex; }
       .hero { padding: 78px 0 70px; }
       .hero-grid { grid-template-columns: 1.04fr .96fr; }
       .cards-3 { grid-template-columns: repeat(3, 1fr); }
@@ -380,7 +499,6 @@
       .story-box { grid-template-columns: 1fr .9fr; }
       .contact-box { grid-template-columns: 1.2fr auto; }
       .footer-grid { grid-template-columns: 1fr auto; align-items: center; }
-      .nav-center { display: flex; }
     }
   </style>
 </head>
@@ -395,21 +513,17 @@
         <span>Lumi</span>
       </a>
 
-      <div class="nav-center" aria-label="Pagine">
-        <a class="nav-link" href="#home" data-page-link="home" data-lang="it">Home</a>
-        <a class="nav-link" href="#home" data-page-link="home" data-lang="en">Home</a>
-        <a class="nav-link" href="#rules" data-page-link="rules" data-lang="it">Regole</a>
-        <a class="nav-link" href="#rules" data-page-link="rules" data-lang="en">Rules</a>
-        <a class="nav-link" href="#privacy" data-page-link="privacy" data-lang="it">Privacy</a>
-        <a class="nav-link" href="#privacy" data-page-link="privacy" data-lang="en">Privacy</a>
-        <a class="nav-link" href="#team" data-page-link="team" data-lang="it">Team</a>
-        <a class="nav-link" href="#team" data-page-link="team" data-lang="en">Team</a>
-      </div>
-
       <div class="nav-actions">
+        <a class="game-btn game-btn-pill desktop-only" href="https://apps.apple.com/app/id6773034104" target="_blank" rel="noopener noreferrer" data-lang="it">
+          <span class="game-pill-bg"><span class="game-pill">Scarica <span class="icon">→</span></span></span>
+        </a>
+        <a class="game-btn game-btn-pill desktop-only" href="https://apps.apple.com/app/id6773034104" target="_blank" rel="noopener noreferrer" data-lang="en">
+          <span class="game-pill-bg"><span class="game-pill">Download <span class="icon">→</span></span></span>
+        </a>
+
         <div class="language-toggle" aria-label="Seleziona lingua">
-          <button class="lang-btn" type="button" id="itBtn" aria-pressed="true">IT</button>
-          <button class="lang-btn" type="button" id="enBtn" aria-pressed="false">EN</button>
+          <button class="game-btn game-btn-circle" type="button" id="itBtn" aria-pressed="true"><span>IT</span></button>
+          <button class="game-btn game-btn-circle" type="button" id="enBtn" aria-pressed="false"><span>EN</span></button>
         </div>
       </div>
     </nav>
@@ -430,27 +544,39 @@
           <p class="lead" data-lang="en">An interactive adventure to rebuild fairy tales, one scene at a time.</p>
 
           <div class="hero-actions">
-            <a class="game-button blue" href="https://apps.apple.com/app/id6773034104" target="_blank" rel="noopener noreferrer" data-lang="it">Scarica su App Store</a>
-            <a class="game-button blue" href="https://apps.apple.com/app/id6773034104" target="_blank" rel="noopener noreferrer" data-lang="en">Download on the App Store</a>
-            <a class="game-button paper" href="#rules" data-page-link="rules" data-lang="it">Scopri come si gioca</a>
-            <a class="game-button paper" href="#rules" data-page-link="rules" data-lang="en">Learn how to play</a>
+            <a class="game-btn game-btn-pill game-btn-primary" href="https://apps.apple.com/app/id6773034104" target="_blank" rel="noopener noreferrer" data-lang="it">
+              <span class="game-pill-bg"><span class="game-pill">Inizia l'avventura! <span class="icon">→</span></span></span>
+            </a>
+            <a class="game-btn game-btn-pill game-btn-primary" href="https://apps.apple.com/app/id6773034104" target="_blank" rel="noopener noreferrer" data-lang="en">
+              <span class="game-pill-bg"><span class="game-pill">Start the adventure! <span class="icon">→</span></span></span>
+            </a>
+            <a class="game-btn game-btn-pill" href="#rules" data-page-link="rules" data-lang="it">
+              <span class="game-pill-bg"><span class="game-pill">Scopri come si gioca</span></span>
+            </a>
+            <a class="game-btn game-btn-pill" href="#rules" data-page-link="rules" data-lang="en">
+              <span class="game-pill-bg"><span class="game-pill">Learn how to play</span></span>
+            </a>
           </div>
 
           <div class="quick-icons" aria-label="Scorciatoie principali">
-            <a class="icon-tab" href="#rules" data-page-link="rules">
-              <img src="book.svg" alt="" aria-hidden="true" />
-              <span data-lang="it">Regole del gioco</span>
-              <span data-lang="en">Game rules</span>
+            <a class="game-btn game-btn-pill" href="#rules" data-page-link="rules">
+              <span class="game-pill-bg">
+                <span class="game-pill">
+                  <img class="icon-img" src="book.svg" alt="" aria-hidden="true" />
+                  <span data-lang="it">Regole del gioco</span>
+                  <span data-lang="en">Game rules</span>
+                </span>
+              </span>
             </a>
-            <a class="icon-tab" href="#privacy" data-page-link="privacy">
-              <span class="icon-emoji" aria-hidden="true">🛡️</span>
-              <span data-lang="it">Privacy famiglia</span>
-              <span data-lang="en">Family privacy</span>
+            <a class="game-btn game-btn-pill" href="#privacy" data-page-link="privacy">
+              <span class="game-pill-bg">
+                <span class="game-pill"><span class="icon" aria-hidden="true">🛡️</span><span data-lang="it">Privacy famiglia</span><span data-lang="en">Family privacy</span></span>
+              </span>
             </a>
-            <a class="icon-tab" href="#team" data-page-link="team">
-              <span class="icon-emoji" aria-hidden="true">👥</span>
-              <span data-lang="it">Chi siamo</span>
-              <span data-lang="en">About us</span>
+            <a class="game-btn game-btn-pill" href="#team" data-page-link="team">
+              <span class="game-pill-bg">
+                <span class="game-pill"><span class="icon" aria-hidden="true">👥</span><span data-lang="it">Chi siamo</span><span data-lang="en">About us</span></span>
+              </span>
             </a>
           </div>
         </div>
@@ -477,10 +603,10 @@
               <p data-lang="en">Here children discover the rules: explore, enter chapters and rebuild each tale by placing the scenes in the right order.</p>
             </div>
             <div class="hero-actions">
-              <a class="game-button blue" href="https://apps.apple.com/app/id6773034104" target="_blank" rel="noopener noreferrer" data-lang="it">Scarica su App Store</a>
-              <a class="game-button blue" href="https://apps.apple.com/app/id6773034104" target="_blank" rel="noopener noreferrer" data-lang="en">Download on the App Store</a>
-              <a class="game-button paper" href="#home" data-page-link="home" data-lang="it">Torna alla home</a>
-              <a class="game-button paper" href="#home" data-page-link="home" data-lang="en">Back home</a>
+              <a class="game-btn game-btn-pill" href="https://apps.apple.com/app/id6773034104" target="_blank" rel="noopener noreferrer" data-lang="it"><span class="game-pill-bg"><span class="game-pill">Scarica su App Store <span class="icon">→</span></span></span></a>
+              <a class="game-btn game-btn-pill" href="https://apps.apple.com/app/id6773034104" target="_blank" rel="noopener noreferrer" data-lang="en"><span class="game-pill-bg"><span class="game-pill">Download on App Store <span class="icon">→</span></span></span></a>
+              <a class="game-btn game-btn-pill" href="#home" data-page-link="home" data-lang="it"><span class="game-pill-bg"><span class="game-pill">Torna alla home</span></span></a>
+              <a class="game-btn game-btn-pill" href="#home" data-page-link="home" data-lang="en"><span class="game-pill-bg"><span class="game-pill">Back home</span></span></a>
             </div>
           </div>
           <div class="story-art" aria-hidden="true"></div>
@@ -518,6 +644,7 @@
             <article class="card"><div class="badge-icon" aria-hidden="true">📷</div><h3 data-lang="it">AR facoltativa</h3><h3 data-lang="en">Optional AR</h3><p data-lang="it">La fotocamera è usata solo in locale per ARKit, senza upload o registrazioni.</p><p data-lang="en">The camera is used locally for ARKit only, with no uploads or recordings.</p></article>
           </div>
           <div class="card" style="margin-top:18px;"><p data-lang="it"><strong>Titolare del trattamento:</strong> Marcello Guida.<br><strong>Ultimo aggiornamento privacy policy:</strong> 1 giugno 2026.</p><p data-lang="en"><strong>Data controller:</strong> Marcello Guida.<br><strong>Last privacy policy update:</strong> June 1, 2026.</p></div>
+          <div class="hero-actions"><a class="game-btn game-btn-ghost" href="#home" data-page-link="home" data-lang="it">Torna alla home</a><a class="game-btn game-btn-ghost" href="#home" data-page-link="home" data-lang="en">Back home</a></div>
         </div>
       </div>
     </section>
@@ -538,6 +665,7 @@
           </div>
           <p style="margin-top:22px;" data-lang="it"><strong>Collaboratore:</strong> Razzino Alberto — Compositore audio.</p>
           <p style="margin-top:22px;" data-lang="en"><strong>Collaborator:</strong> Razzino Alberto — Audio composer.</p>
+          <div class="hero-actions"><a class="game-btn game-btn-pill" href="#contact" data-page-link="contact" data-lang="it"><span class="game-pill-bg"><span class="game-pill">Contatti</span></span></a><a class="game-btn game-btn-pill" href="#contact" data-page-link="contact" data-lang="en"><span class="game-pill-bg"><span class="game-pill">Contact</span></span></a></div>
         </div>
       </div>
     </section>
@@ -552,8 +680,8 @@
             <p data-lang="en">Write to us for support, feedback, collaborations or privacy requests.</p>
             <p><strong>Email:</strong> <a href="mailto:mguida2604@gmail.com?subject=WORLD%20OF%20FABLES%20app%20support">mguida2604@gmail.com</a></p>
           </div>
-          <a class="game-button blue" href="mailto:mguida2604@gmail.com?subject=WORLD%20OF%20FABLES%20app%20support" data-lang="it">Scrivi al supporto</a>
-          <a class="game-button blue" href="mailto:mguida2604@gmail.com?subject=WORLD%20OF%20FABLES%20app%20support" data-lang="en">Contact support</a>
+          <a class="game-btn game-btn-pill" href="mailto:mguida2604@gmail.com?subject=WORLD%20OF%20FABLES%20app%20support" data-lang="it"><span class="game-pill-bg"><span class="game-pill">Scrivi al supporto <span class="icon">→</span></span></span></a>
+          <a class="game-btn game-btn-pill" href="mailto:mguida2604@gmail.com?subject=WORLD%20OF%20FABLES%20app%20support" data-lang="en"><span class="game-pill-bg"><span class="game-pill">Contact support <span class="icon">→</span></span></span></a>
         </div>
       </div>
     </section>
@@ -578,8 +706,8 @@
         <span data-lang="en">iOS, optimized for iPad. Check iPhone compatibility if needed.</span><br>
         <span>OpenDyslexic font by Abelardo Gonzalez, SIL Open Font License.</span>
       </div>
-      <a href="#contact" data-page-link="contact" data-lang="it">Contatti</a>
-      <a href="#contact" data-page-link="contact" data-lang="en">Contact</a>
+      <a class="game-btn game-btn-pill" href="#contact" data-page-link="contact" data-lang="it"><span class="game-pill-bg"><span class="game-pill">Contatti</span></span></a>
+      <a class="game-btn game-btn-pill" href="#contact" data-page-link="contact" data-lang="en"><span class="game-pill-bg"><span class="game-pill">Contact</span></span></a>
     </div>
   </footer>
 
