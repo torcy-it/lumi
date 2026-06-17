@@ -8,9 +8,11 @@
   <meta property="og:title" content="Lumi — World of Fables" />
   <meta property="og:description" content="An interactive adventure to rebuild fairy tales, one scene at a time." />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="images/menu-scene.png" />
+  <meta property="og:image" content="images/lumi-say-hi.png" />
 
-  <link rel="icon" href="images/app-icon.png" type="image/png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png?v=3" />
+  <link rel="icon" type="image/png" sizes="192x192" href="images/favicon-192.png?v=3" />
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png?v=3" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&display=swap" rel="stylesheet" />
@@ -23,7 +25,7 @@
     <div class="container top-bar-inner">
       <a class="brand" href="index.html" aria-label="Lumi — Home">
         <div class="brand-icon">
-          <img src="images/app-icon.png" alt="" width="62" height="62" />
+          <img src="images/app-icon-default.png?v=3" alt="" width="62" height="62" />
         </div>
         <span>Lumi</span>
       </a>
@@ -36,7 +38,7 @@
       <div class="container page">
         <div class="content" aria-label="Lumi introduction">
 
-          <h1 class="app-title" aria-label="Lumi World Of Fables">
+          <h1 class="app-title app-title--center" aria-label="Lumi World Of Fables">
             <span class="app-title-line app-title-line1">
               <span class="app-title-stroke" aria-hidden="true">Lumi</span>
               <span class="app-title-fill">Lumi</span>
@@ -70,24 +72,18 @@
           </nav>
         </div>
 
-        <aside class="hero-shot" aria-label="Game preview">
-          <img
-            src="images/menu-scene.png"
-            alt="Lumi main menu with the world map of fairy tales"
-            width="800"
-            height="600"
-            loading="eager"
-          />
-          <img
-            class="hero-shot-mascot"
-            src="images/lumi-happy.png"
-            alt=""
-            width="130"
-            height="130"
-            aria-hidden="true"
-            loading="lazy"
-          />
-        </aside>
+        <div class="hero-mascot-wrap" aria-label="Lumi character">
+          <button type="button" class="hero-mascot-btn" aria-label="Tap Lumi to jump">
+            <img
+              class="hero-mascot"
+              src="images/lumi-say-hi.png"
+              alt="Lumi waving hello"
+              width="400"
+              height="647"
+              loading="eager"
+            />
+          </button>
+        </div>
       </div>
     </section>
   </main>
@@ -98,6 +94,20 @@
       <p>Optimized for iPadOS</p>
     </div>
   </footer>
+
+  <script>
+    document.querySelector(".hero-mascot-btn")?.addEventListener("click", (event) => {
+      const mascot = event.currentTarget.querySelector(".hero-mascot");
+      if (!mascot || mascot.classList.contains("hero-mascot--jump")) return;
+
+      mascot.classList.add("hero-mascot--jump");
+      mascot.addEventListener(
+        "animationend",
+        () => mascot.classList.remove("hero-mascot--jump"),
+        { once: true }
+      );
+    });
+  </script>
 
 </body>
 </html>

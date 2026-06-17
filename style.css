@@ -39,6 +39,7 @@
 
   --primary-min-width: 270px;
   --primary-min-height: 76px;
+  --action-buttons-max-width: 480px;
 
   /* Pulsante indietro (GamePillButton compatto) */
   --back-btn-min-height: 46px;
@@ -47,6 +48,8 @@
   /* GameCircleBackButton */
   --circle-btn-size: 56px;
   --circle-icon-size: 19px;
+  --top-bar-back-btn-size: 48px;
+  --top-bar-back-icon-size: 16px;
 
   /* SettingsTheme / InfoTheme (About nel gioco) */
   --panel-fill: #f9f4e3;
@@ -74,6 +77,8 @@
 
     --circle-btn-size: 80px;
     --circle-icon-size: 27px;
+    --top-bar-back-btn-size: 52px;
+    --top-bar-back-icon-size: 18px;
   }
 }
 
@@ -175,6 +180,43 @@ img {
   object-fit: cover;
 }
 
+.top-bar--subpage .top-bar-inner {
+  justify-content: space-between;
+}
+
+.top-bar-back-btn,
+.top-bar-brand {
+  flex-shrink: 0;
+}
+
+.top-bar-brand {
+  margin-left: auto;
+  color: inherit;
+  text-decoration: none;
+}
+
+.top-bar-brand:hover,
+.top-bar-brand:focus-visible {
+  opacity: 0.92;
+}
+
+.top-bar-back-btn .game-circle-bg {
+  width: var(--top-bar-back-btn-size);
+  height: var(--top-bar-back-btn-size);
+}
+
+.top-bar-back-btn .game-circle-bg::before {
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  height: calc(var(--top-bar-back-btn-size) * 0.4);
+}
+
+.top-bar-back-btn .game-circle-icon {
+  width: var(--top-bar-back-icon-size);
+  height: var(--top-bar-back-icon-size);
+}
+
 .top-nav {
   display: flex;
   flex-wrap: wrap;
@@ -223,7 +265,8 @@ img {
 .content {
   display: grid;
   gap: 28px;
-  justify-items: start;
+  justify-items: center;
+  width: 100%;
 }
 
 /* --- Titolo app (AppMenuTitleView · mainMenu) --- */
@@ -372,6 +415,8 @@ img {
 .subtitle {
   margin: 0;
   max-width: 560px;
+  margin-inline: auto;
+  text-align: center;
   color: var(--muted);
   font-size: clamp(1.05rem, 2vw, 1.35rem);
   line-height: 1.45;
@@ -463,12 +508,19 @@ img {
   line-height: 1;
 }
 
+.game-btn-primary {
+  width: min(100%, var(--action-buttons-max-width));
+}
+
 .game-btn-primary .game-pill-bg {
-  min-width: var(--primary-min-width);
+  width: 100%;
+  min-width: 0;
   min-height: var(--primary-min-height);
 }
 
 .game-btn-primary .game-pill {
+  width: 100%;
+  justify-content: center;
   min-height: var(--primary-min-height);
   padding: 18px 42px;
   font-size: clamp(1.15rem, 2.4vw, 1.65rem);
@@ -551,40 +603,39 @@ img {
   filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.14));
 }
 
-.page-back-btn {
-  grid-column: 1;
-  justify-self: start;
-  flex-shrink: 0;
-}
-
 .page-header {
-  display: grid;
-  grid-template-columns: var(--circle-btn-size) 1fr var(--circle-btn-size);
-  align-items: center;
-  gap: 8px 12px;
+  display: block;
+  text-align: center;
   margin-bottom: 20px;
 }
 
 .page-header .app-title {
-  grid-column: 2;
-  justify-self: center;
-  margin: 0;
+  margin-inline: auto;
   width: auto;
   max-width: 100%;
   padding-inline: 0;
 }
 
-.page-header-spacer {
-  grid-column: 3;
-  width: var(--circle-btn-size);
-  height: var(--circle-btn-size);
-}
-
 .small-buttons {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
   margin-top: 4px;
+  width: min(100%, var(--action-buttons-max-width));
+}
+
+.small-buttons .game-btn {
+  width: 100%;
+  min-width: 0;
+}
+
+.small-buttons .game-pill-bg {
+  width: 100%;
+}
+
+.small-buttons .game-pill {
+  width: 100%;
+  justify-content: center;
 }
 
 /* --- Screenshot placeholder --- */
@@ -957,10 +1008,15 @@ img {
 
 .tutorial-step-body {
   display: grid;
-  gap: 8px;
+  grid-template-columns: auto 1fr;
+  column-gap: 12px;
+  row-gap: 8px;
+  align-items: center;
 }
 
 .tutorial-step-num {
+  grid-row: 1;
+  grid-column: 1;
   display: inline-grid;
   place-items: center;
   width: 32px;
@@ -973,9 +1029,12 @@ img {
   font-size: 0.95rem;
   color: var(--btn-label);
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.18);
+  flex-shrink: 0;
 }
 
 .tutorial-step h2 {
+  grid-row: 1;
+  grid-column: 2;
   margin: 0;
   font-family: "Fredoka", ui-rounded, system-ui, sans-serif;
   font-size: clamp(1.15rem, 2.5vw, 1.35rem);
@@ -984,6 +1043,8 @@ img {
 }
 
 .tutorial-step p {
+  grid-row: 2;
+  grid-column: 1 / -1;
   margin: 0;
   font-size: 0.98rem;
   line-height: 1.55;
@@ -991,7 +1052,71 @@ img {
   font-weight: 600;
 }
 
-/* --- Hero screenshot --- */
+/* --- Hero mascot (no frame) --- */
+
+.hero-mascot-wrap {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  min-height: clamp(280px, 42vw, 420px);
+}
+
+.hero-mascot-btn {
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.hero-mascot-btn:focus-visible {
+  outline: 3px solid var(--deep-blue);
+  outline-offset: 6px;
+  border-radius: 12px;
+}
+
+.hero-mascot {
+  display: block;
+  width: auto;
+  max-width: min(100%, 320px);
+  max-height: clamp(260px, 38vw, 390px);
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.18));
+  transform-origin: center bottom;
+  pointer-events: none;
+}
+
+.hero-mascot--jump {
+  animation: lumi-jump-once 0.65s ease-in-out 1;
+}
+
+@keyframes lumi-jump-once {
+  0%,
+  100% {
+    transform: translateY(0) scaleX(1) scaleY(1);
+  }
+
+  25% {
+    transform: translateY(-6px) scaleX(1.02) scaleY(0.96);
+  }
+
+  50% {
+    transform: translateY(-28px) scaleX(0.98) scaleY(1.05);
+  }
+
+  75% {
+    transform: translateY(-4px) scaleX(1.01) scaleY(0.98);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-mascot--jump {
+    animation: none;
+  }
+}
 
 .hero-shot {
   position: relative;
@@ -1007,14 +1132,6 @@ img {
   border-radius: 22px;
   aspect-ratio: 4 / 3;
   object-fit: cover;
-}
-
-.hero-shot-mascot {
-  position: absolute;
-  right: -8px;
-  bottom: -12px;
-  width: clamp(88px, 18vw, 130px);
-  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.2));
 }
 
 .section-inner {
@@ -1295,10 +1412,18 @@ img {
     height: 50px;
   }
 
-  .hero-shot-mascot {
-    width: 72px;
-    right: 4px;
-    bottom: -6px;
+  .hero-mascot-wrap {
+    min-height: 240px;
+  }
+
+  .hero-mascot {
+    max-width: min(100%, 220px);
+    max-height: 280px;
+  }
+
+  .small-buttons {
+    grid-template-columns: 1fr;
+    width: 100%;
   }
 
   .game-btn-primary .game-pill-bg {
